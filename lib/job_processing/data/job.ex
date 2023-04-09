@@ -72,6 +72,15 @@ defmodule JobProcessing.Data.Job do
     end
   end
 
+  @doc """
+  Dumps the job to a bash script returned as a string
+  """
+  @spec dump_to_bash_script(job()) :: bash_script
+        when bash_script: String.t()
+  def dump_to_bash_script(job) do
+    "#!/usr/bin/env bash\n" <> Enum.map_join(job.tasks, "\n", & &1.command)
+  end
+
   ####################### PRIVATE FUNCTIONS #######################
 
   @doc false

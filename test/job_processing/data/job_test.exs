@@ -30,7 +30,6 @@ defmodule JobProcessing.JobTest do
       assert {:ok, _job} = Job.create(%{tasks: [task1_attrs, task2_attrs, task3_attrs]})
     end
 
-    @tag :wip
     test "and fail because the requires key doesn't specify a valid task name" do
       task1_attrs = %{name: "task1", command: "echo 'task1'", requires: ["task2"]}
       task2_attrs = %{name: "task2", command: "echo 'task2'", requires: ["task3"]}
@@ -90,6 +89,22 @@ defmodule JobProcessing.JobTest do
       assert {:error,
               {:job_sort_tasks, "tasks are unsortable. please check the \"requires\" key"}} =
                Job.sort_tasks(job)
+    end
+  end
+
+  describe "dump job to bash script" do
+    test "and succeed" do
+      expected_bash_script = """
+      #!/usr/bin/env bash
+      touch /tmp/file1
+      echo 'Hello World!' > /tmp/file1
+      cat /tmp/file1
+      rm /tmp/file1\
+      """
+
+      {:ok, job} = Job.create(%{tasks: @example_task_list})
+      {:ok, job} = Job.sort_tasks(job)
+      assert Job.dump_to_bash_script(job) == expected_bash_script
     end
   end
 end
