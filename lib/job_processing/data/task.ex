@@ -5,19 +5,20 @@ defmodule JobProcessing.Data.Task do
   use Ecto.Schema
   use JobProcessing.Data
 
-  @required_fileds ~w(name command)a
+  @required_fileds ~w(name command requires)a
   @optional_fields ~w()a
 
   @primary_key false
   embedded_schema do
     field :name, :string
     field :command, :string
+    field :requires, {:array, :string}, default: []
   end
 
   @doc """
   Creates a task with the given attributes.
   """
-  @spec create(map()) :: {:ok, %__MODULE__{}} | {:error, {:create_task, String.t()}}
+  @spec create(map()) :: {:ok, %__MODULE__{}} | {:error, {:task_create, String.t()}}
   def create(attrs \\ %{}) do
     %__MODULE__{}
     |> changeset(attrs)
@@ -28,7 +29,7 @@ defmodule JobProcessing.Data.Task do
 
       %Ecto.Changeset{valid?: false} = changeset ->
         errors = errors_on(changeset)
-        {:error, {:create_task, "couldn't create task because: #{inspect(errors)}"}}
+        {:error, {:task_create, "couldn't create task because: #{inspect(errors)}"}}
     end
   end
 
