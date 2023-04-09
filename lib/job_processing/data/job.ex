@@ -60,6 +60,7 @@ defmodule JobProcessing.Data.Job do
 
     case :digraph_utils.topsort(dg) do
       false ->
+        :digraph.delete(dg)
         {:error, {:job_sort_tasks, "tasks are unsortable. please check the \"requires\" key"}}
 
       ordered_task_names ->
@@ -69,6 +70,7 @@ defmodule JobProcessing.Data.Job do
           ordered_task_names
           |> Enum.map(fn task_name -> Map.fetch!(tasks_map, task_name) end)
 
+        :digraph.delete(dg)
         {:ok, %{job | tasks: ordered_tasks}}
     end
   end
