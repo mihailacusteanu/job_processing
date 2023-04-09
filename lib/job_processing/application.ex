@@ -11,7 +11,7 @@ defmodule JobProcessing.Application do
       # Start the Telemetry supervisor
       JobProcessingWeb.Telemetry,
       # Start the Ecto repository
-      JobProcessing.Repo,
+      # JobProcessing.Repo,
       # Start the PubSub system
       {Phoenix.PubSub, name: JobProcessing.PubSub},
       # Start Finch
