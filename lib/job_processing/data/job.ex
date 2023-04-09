@@ -7,10 +7,11 @@ defmodule JobProcessing.Data.Job do
 
   alias JobProcessing.Data.Task
 
-  @type job() :: __MODULE__
-  @type task() :: Task
+  @type job() :: %__MODULE__{}
+  @type task() :: Task.task()
 
   @primary_key false
+  @derive {Jason.Encoder, only: [:tasks]}
   embedded_schema do
     embeds_many :tasks, JobProcessing.Data.Task
   end

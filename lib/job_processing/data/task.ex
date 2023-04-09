@@ -5,10 +5,13 @@ defmodule JobProcessing.Data.Task do
   use Ecto.Schema
   use JobProcessing.Data
 
+  @type task() :: %__MODULE__{}
+
   @required_fileds ~w(name command requires)a
   @optional_fields ~w()a
 
   @primary_key false
+  @derive {Jason.Encoder, only: [:name, :command]}
   embedded_schema do
     field :name, :string
     field :command, :string
@@ -18,7 +21,7 @@ defmodule JobProcessing.Data.Task do
   @doc """
   Creates a task with the given attributes.
   """
-  @spec create(map()) :: {:ok, %__MODULE__{}} | {:error, {:task_create, String.t()}}
+  @spec create(map()) :: {:ok, task()} | {:error, {:task_create, String.t()}}
   def create(attrs \\ %{}) do
     %__MODULE__{}
     |> changeset(attrs)

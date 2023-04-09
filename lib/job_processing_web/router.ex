@@ -12,6 +12,8 @@ defmodule JobProcessingWeb.Router do
 
   pipeline :api do
     plug :accepts, ["json"]
+
+    post "/job/sort", JobProcessingWeb.Api.JobController, :sort
   end
 
   scope "/", JobProcessingWeb do
